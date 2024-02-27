@@ -1,4 +1,4 @@
-const storageKey = "index-memory";
+const userKey = "index-memory";
 
 class User {
   constructor(name, surname) {
@@ -13,65 +13,65 @@ const surnameInput = document.getElementById("yourSurname");
 const saveBtn = document.getElementById("btn-save");
 const resetBtn = document.getElementById("btn-reset");
 const form = document.querySelector("form");
+const p = document.createElement("p");
 
 const save = (e) => {
   e.preventDefault();
 
   const newUser = new User(nameInput.value, surnameInput.value);
-  const savedUsers = localStorage.getItem(storageKey);
-  if (savedUsers) {
-    const savedUsersArr = JSON.parse(savedUsers);
-    savedUsersArr.push(newUser);
-    localStorage.setItem(storageKey, JSON.stringify(savedUsersArr));
-  } else {
-    const users = [];
-    users.push(newUser);
-    localStorage.setItem(storageKey, JSON.stringify(users));
-  }
+
+  localStorage.setItem(userKey, JSON.stringify(newUser));
+
   nameInput.value = "";
   surnameInput.value = "";
 
-  //   text();
   generateP();
   console.log(newUser);
 };
 
 const generateP = () => {
-  const savedUsers = localStorage.getItem(storageKey);
+  const savedUsers = localStorage.getItem(userKey);
   const pCont = document.getElementById("p-cont");
 
   if (savedUsers) {
     const savedUsersArr = JSON.parse(savedUsers);
     pCont.innerHTML = "";
 
-    savedUsersArr.forEach((el) => {
-      const p = document.createElement("p");
-      p.className = "p-item";
-      p.innerText = `${el.name} -- ${el.surname}`;
-      pCont.appendChild(p);
-    });
+    const p = document.createElement("p");
+    p.className = "p-item";
+    p.innerText = `${savedUsersArr.name} -- ${savedUsersArr.surname}`;
+    pCont.appendChild(p);
   }
 };
-//
-// const text = () => {
-//   if (localStorage.getItem(yourName) && localStorage.getItem(yourSurname)) {
-//     message = `${localStorage.getItem(yourName)} - ${localStorage.getItem(yourSurname)}`;
-//   } else {
-//     message = "Nessun valore precedentemente inviato";
-//   }
-//   document.querySelector("p-cont").innerHTML = message;
-// };
-//
+
 const reset = () => {
   const confirmed = confirm("Are you sure?");
   if (confirmed) {
     form.value = "";
-    localStorage.removeItem(storageKey);
+    localStorage.removeItem(userKey);
+    const pCont = document.getElementById("p-cont");
+    pCont.innerHTML = "";
   }
 };
 
 window.onload = () => {
   form.addEventListener("submit", save);
   resetBtn.addEventListener("click", reset);
-  generateP();
 };
+
+const counterTime = () => {
+  let counterEl = document.getElementById("counter");
+  let timer = sessionStorage.getItem("counter");
+  if (timer === null) {
+    timer = 0;
+  } else {
+    timer = parseInt(timer);
+    timer = timer + 1;
+  }
+
+  sessionStorage.setItem("counter", timer);
+  counterEl.innerText = timer;
+};
+
+setInterval(counterTime, 1000);
+counterTime();
