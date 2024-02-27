@@ -59,7 +59,7 @@ window.onload = () => {
   resetBtn.addEventListener("click", reset);
 };
 
-const counterTime = () => {
+function timerUp() {
   let counterEl = document.getElementById("counter");
   let timer = sessionStorage.getItem("counter");
   if (timer === null) {
@@ -70,8 +70,7 @@ const counterTime = () => {
   }
 
   sessionStorage.setItem("counter", timer);
-  counterEl.innerText = timer;
-};
-
-setInterval(counterTime, 1000);
-counterTime();
+  counterEl.textContent = timer;
+  setTimeout(timerUp, 1000);
+}
+timerUp();
